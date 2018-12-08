@@ -31,6 +31,7 @@ docker-compose up
 #### Requirements
 - Node 10.14.1
 - yarn 1.12
+- redis 5.0.2
 
 ```bash
 cd services/service-gateway && yarn start
