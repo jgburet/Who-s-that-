@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  service-gateway:
+    build: ./services/service-gateway
+    ports:
+      - "4000:4000"
+
+  worker-gather-information:
+    build: ./services/worker-gather-information
