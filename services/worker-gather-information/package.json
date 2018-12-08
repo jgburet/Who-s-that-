@@ -12,6 +12,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "bee-queue": "^1.2.2",
     "typescript": "^3.2.2"
   },
   "devDependencies": {
