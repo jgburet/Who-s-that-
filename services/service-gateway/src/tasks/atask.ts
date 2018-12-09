@@ -28,6 +28,13 @@ export default abstract class ATask {
     this.queue = queuesDic[queueName];
   }
 
+  /*
+   * `#run` handles failures by returning `null`.
+   * It also handles timeouts coming from the external services we query
+   * and returns `null`.
+   * It rejects if there is no consumer or if they are too busy (so we know
+   * about it).
+   */
   public async run({ timeout } = { timeout: 3000 }) {
     const job = await this.queue
       .createJob(this.param)
@@ -37,11 +44,11 @@ export default abstract class ATask {
       const jobExpirationTimeout = setTimeout(
         () => rej("Job did not start in time"),
         UNTRIGGERED_JOB_TIMEOUT
-      );
+      ); // Meh, our fault.
 
       job.on("progress", () => clearTimeout(jobExpirationTimeout));
-      job.on("succeeded", result => res(result));
-      job.on("failed", rej);
+      job.on("succeeded", res);
+      job.on("failed", () => res(null)); // we are not liable for it, let's silent it
     });
   }
 }
