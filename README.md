@@ -52,7 +52,6 @@ This is a monorepo. Each directory under `services/` is an independent part of t
 
 ## TODO
 - For now, the lookup methods available are hard coded, and their respective `Task` classes (cf `service-gateway`) are generated from that. It would be cool :sunglasses: to manage them dynamically, like, updating them according to a list broadcast-ed by the workers alive.
-- Define the scalar types in the `service-gateway` used, so we can actually have a real validation of our input (cc "Ip" & "DomainName").
 - Actually implement lookup methods :joy: because that's kinda useless for now.
   - Have some fun, look for dbs, websites, whatever.
 - Test. Sorry, too much back and forth for now, did not have time to do that :cry:

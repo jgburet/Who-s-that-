@@ -1,4 +1,7 @@
 import { GraphQLServer } from "graphql-yoga";
+
+import DomainName from "./graphql/scalar-domain-name";
+import Ip from "./graphql/scalar-ip";
 import Tasks from "./tasks";
 
 import LOOKUP_METHODS from "./lookup-methods";
@@ -6,9 +9,7 @@ import LOOKUP_METHODS from "./lookup-methods";
 const typeDefs = `
   scalar DomainName
   scalar Ip
-
   scalar Lookup
-  scalar LookupResult
 
   enum LookupMethod {
     ${LOOKUP_METHODS.join("\n")}
@@ -20,10 +21,9 @@ const typeDefs = `
   }
 `;
 
-type DomainName = string;
-type Ip = string;
-
 const resolvers = {
+  DomainName,
+  Ip,
   Query: {
     async newIpLookup(_, { ip, methods = LOOKUP_METHODS }) {
       const tasks = methods.map(m => [m, new Tasks[m]({ ip }).run()]);
