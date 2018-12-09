@@ -30,9 +30,11 @@ export default abstract class AConsumer {
       throw new Error("Just don't");
     }
 
-    this.queue.process(concurency, ({ data }) => {
+    this.queue.process(concurency, job => {
       console.log(`Working on a new job from queue '${this.name}'`);
-      return this.handler(data);
+      job.reportProgress(0); // Informing we started the job
+
+      return this.handler(job.data);
     });
 
     console.log(`Waiting for tasks from queue '${this.name}'`);
