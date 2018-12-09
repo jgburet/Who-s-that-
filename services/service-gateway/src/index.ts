@@ -1,55 +1,49 @@
 import { GraphQLServer } from "graphql-yoga";
 import tasksDic from "./task-dictionary";
 
+const LOOKUP_METHODS = process.env.LOOKUP_METHODS
+  ? process.env.LOOKUP_METHODS.split(",")
+  : ["geoIp", "whois"];
+
 const typeDefs = `
-  scalar GeoIpResult
-  scalar WhoisResult
+  scalar DomainName
+  scalar Ip
+  scalar LookupResult
+
+  enum LookupMethod {
+    ${LOOKUP_METHODS.join("\n")}
+  }
 
   type Lookup {
-    geoIp: GeoIpResult
-    whois: WhoisResult
+    ${LOOKUP_METHODS.map(lm => `${lm}: LookupResult`).join("\n")}
   }
 
   type Query {
-    newIpLookup(ip: String!): Lookup!
-    newDnLookup(dn: String!): Lookup!
+    newIpLookup(ip: Ip!, methods: [LookupMethod]): Lookup!
+    newDnLookup(dn: DomainName!, methods: [LookupMethod]): Lookup!
   }
 `;
 
-interface IIpInput {
-  ip: string;
-}
-interface IDnInput {
-  dn: string;
-}
-
-type GeoIpResult = object;
-type WhoisResult = object;
-
-class Lookup {
-  constructor(public param: IIpInput | IDnInput) {}
-
-  public async geoIp(): Promise<GeoIpResult> {
-    const taskName = "geoIp";
-    const result = await tasksDic[taskName](this.param);
-    return result;
-  }
-
-  public async whois(): Promise<WhoisResult> {
-    const taskName = "geoIp";
-    const result = await tasksDic[taskName](this.param);
-    return result;
-  }
-}
+type DomainName = string;
+type Ip = string;
 
 const resolvers = {
   Query: {
-    newIpLookup(_, param): Lookup {
-      return new Lookup(param);
+    async newIpLookup(_, { ip, methods = LOOKUP_METHODS }) {
+      const tasks = methods.map(m => [m, tasksDic[m](ip)]);
+      const result = {};
+      for (const [method, taskPromise] of tasks) {
+        result[method] = await taskPromise;
+      }
+      return result;
     },
-    // Will become cleaner with coming "union input"
-    newDnLookup(_, param): Lookup {
-      return new Lookup(param);
+    async newDnLookup(_, { dn, methods = LOOKUP_METHODS }) {
+      const tasks = methods.map(m => [m, tasksDic[m](dn)]);
+      const result = {};
+      for (const [method, taskPromise] of tasks) {
+        result[method] = await taskPromise;
+      }
+      return result;
     }
   }
 };
