@@ -39,7 +39,7 @@ export default abstract class ATask {
         UNTRIGGERED_JOB_TIMEOUT
       );
 
-      job.on("progress", () => clearTimeout(publishTimeout));
+      job.on("progress", () => clearTimeout(jobExpirationTimeout));
       job.on("succeeded", result => res(result));
       job.on("failed", rej);
     });
