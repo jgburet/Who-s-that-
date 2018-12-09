@@ -1,14 +1,50 @@
 import { GraphQLServer } from "graphql-yoga";
 
 const typeDefs = `
+  scalar GeoIpResult
+  scalar WhoisResult
+
+  type Lookup {
+    geoIp: GeoIpResult
+    whois: WhoisResult
+  }
+
   type Query {
-    hello(name: String): String!
+    newIpLookup(ip: String!): Lookup!
+    newDnLookup(dn: String!): Lookup!
   }
 `;
 
+interface IIpInput {
+  ip: string;
+}
+interface IDnInput {
+  dn: string;
+}
+
+type GeoIpResult = object;
+type WhoisResult = object;
+
+class Lookup {
+  constructor(public param: IIpInput | IDnInput) {}
+
+  public geoIp(): GeoIpResult {
+    return null;
+  }
+
+  public whois(): WhoisResult {
+    return null;
+  }
+}
+
 const resolvers = {
   Query: {
-    hello: (_: any, { name }: any) => `Hello ${name || "world"}!`
+    newIpLookup(_, param): Lookup {
+      return new Lookup(param);
+    },
+    newDnLookup(_, param): Lookup {
+      return new Lookup(param);
+    }
   }
 };
 
