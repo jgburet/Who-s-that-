@@ -1,4 +1,5 @@
 import { GraphQLServer } from "graphql-yoga";
+import tasksDic from "./task-dictionary";
 
 const typeDefs = `
   scalar GeoIpResult
@@ -28,12 +29,16 @@ type WhoisResult = object;
 class Lookup {
   constructor(public param: IIpInput | IDnInput) {}
 
-  public geoIp(): GeoIpResult {
-    return null;
+  public async geoIp(): Promise<GeoIpResult> {
+    const taskName = "geoIp";
+    const result = await tasksDic[taskName](this.param);
+    return result;
   }
 
-  public whois(): WhoisResult {
-    return null;
+  public async whois(): Promise<WhoisResult> {
+    const taskName = "geoIp";
+    const result = await tasksDic[taskName](this.param);
+    return result;
   }
 }
 
@@ -42,6 +47,7 @@ const resolvers = {
     newIpLookup(_, param): Lookup {
       return new Lookup(param);
     },
+    // Will become cleaner with coming "union input"
     newDnLookup(_, param): Lookup {
       return new Lookup(param);
     }

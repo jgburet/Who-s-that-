@@ -11,6 +11,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "bee-queue": "^1.2.2",
     "graphql-yoga": "^1.16.7",
     "typescript": "^3.2.2"
   },
