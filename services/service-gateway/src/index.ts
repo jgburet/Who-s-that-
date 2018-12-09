@@ -1,21 +1,17 @@
 import { GraphQLServer } from "graphql-yoga";
-import tasksDic from "./task-dictionary";
+import Tasks from "./tasks";
 
-const LOOKUP_METHODS = process.env.LOOKUP_METHODS
-  ? process.env.LOOKUP_METHODS.split(",")
-  : ["geoIp", "whois"];
+import LOOKUP_METHODS from "./lookup-methods";
 
 const typeDefs = `
   scalar DomainName
   scalar Ip
+
+  scalar Lookup
   scalar LookupResult
 
   enum LookupMethod {
     ${LOOKUP_METHODS.join("\n")}
-  }
-
-  type Lookup {
-    ${LOOKUP_METHODS.map(lm => `${lm}: LookupResult`).join("\n")}
   }
 
   type Query {
@@ -30,7 +26,7 @@ type Ip = string;
 const resolvers = {
   Query: {
     async newIpLookup(_, { ip, methods = LOOKUP_METHODS }) {
-      const tasks = methods.map(m => [m, tasksDic[m](ip)]);
+      const tasks = methods.map(m => [m, new Tasks[m]({ ip }).run()]);
       const result = {};
       for (const [method, taskPromise] of tasks) {
         result[method] = await taskPromise;
@@ -38,10 +34,10 @@ const resolvers = {
       return result;
     },
     async newDnLookup(_, { dn, methods = LOOKUP_METHODS }) {
-      const tasks = methods.map(m => [m, tasksDic[m](dn)]);
+      const tasks = methods.map(m => [m, new Tasks[m]({ dn }).run()]);
       const result = {};
       for (const [method, taskPromise] of tasks) {
-        result[method] = await taskPromise;
+        result[method] = await taskPromise.catch(() => null);
       }
       return result;
     }
