@@ -10,7 +10,7 @@ docker-compose up
 curl \
   -X POST \
   -H "Content-Type: application/json" \
-  --data '{ "query": "{ hello }" }' \
+  --data '{ "query": "{ newDnLookup(dn: "github.com", methods: [echo]) }" }' \
   http://0.0.0.0:4000
 ```
 
@@ -52,6 +52,29 @@ This is a monorepo. Each directory under `services/` is an independent part of t
 
 ## TODO
 - For now, the lookup methods available are hard coded, and their respective `Task` classes (cf `service-gateway`) are generated from that. It would be cool :sunglasses: to manage them dynamically, like, updating them according to a list broadcast-ed by the workers alive.
-- Actually implement lookup methods :joy: because that's kinda useless for now.
-  - Have some fun, look for dbs, websites, whatever.
+- Have some fun, look for dbs/websites/whatever-scrapper.
 - Test. Sorry, too much back and forth for now, did not have time to do that :cry:
+
+## Functionalities & examples
+```
+# available methods:
+echo
+geoIp
+rdap
+```
+
+```bash
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  --data '{ "query": "{ newDnLookup(dn: "github.com", methods: [echo, geoIp]) }" }' \
+  http://0.0.0.0:4000
+```
+
+```bash
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  --data '{ "query": "{ newIpLookup(ip: "192.30.255.112", methods: [geoIp]) }" }' \
+  http://0.0.0.0:4000
+```
