@@ -27,6 +27,11 @@ curl \
 docker-compose up
 ```
 
+Adjust the scale:
+```bash
+docker-compose up --scale worker-gather-information=4 -d
+```
+
 ### Not using docker
 #### Requirements
 - Node 10.14.1
