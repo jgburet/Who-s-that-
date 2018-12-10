@@ -61,6 +61,7 @@ This is a monorepo. Each directory under `services/` is an independent part of t
 echo
 geoIp
 rdap
+whois
 ```
 
 ```bash
