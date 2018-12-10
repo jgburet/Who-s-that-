@@ -49,7 +49,11 @@ cd services/worker-gather-information && yarn start
 
 ## How it works
 The `service-gateway` creates `tasks` into a `redis` server. Each lookup method has its own queue.  
-The instances of `worker-gather-information` consumes those tasks, according to their configuration. Meaning, we can spawn new instances that will only deal with certain queues.
+The instances of `worker-gather-information` consumes those tasks, according to their configuration. Meaning, we can spawn new instances that will only deal with certain queues.  
+
+Defining new methods is quite simple:
+- create a new class and its handler in `worker-gather-information/src/consumers/`
+- whitelist the method in `service-gateway/src/lookup-methods.ts`
 
 
 ## Project structure
@@ -57,8 +61,11 @@ This is a monorepo. Each directory under `services/` is an independent part of t
 
 ## TODO
 - For now, the lookup methods available are hard coded, and their respective `Task` classes (cf `service-gateway`) are generated from that. It would be cool :sunglasses: to manage them dynamically, like, updating them according to a list broadcast-ed by the workers alive.
-- Have some fun, look for dbs/websites/whatever-scrapper.
-- Test. Sorry, too much back and forth for now, did not have time to do that :cry:
+- Have some fun:
+  - look for dbs/websites/whatever-scrapper;
+  - create some kind of subscription service to get ping-ed with reports;
+- Tests. Sorry, too much back and forth for now, did not have time to do that :cry:  
+To do it correctly, I think we should mock the redis connection or the `Queue` class from package `bee-queue`.
 
 ## Functionalities & examples
 ```
