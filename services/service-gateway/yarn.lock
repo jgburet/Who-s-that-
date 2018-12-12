@@ -80,7 +80,14 @@
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-14.0.3.tgz#389e2e5b83ecdb376d9f98fae2094297bc112c1c"
   integrity sha512-TcFkpEjcQK7w8OcrQcd7iIBPjU0rdyi3ldj6d0iJ4PPSzbWqPBvXj9KSwO14hTOX2dm9RoiH7VuxksJLNYdXUQ==
 
-"@types/jest@^23.3.10":
+"@types/jest-plugin-context@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@types/jest-plugin-context/-/jest-plugin-context-2.9.0.tgz#70e1c1ca5c581ec6789a1774650216b6017e1b6d"
+  integrity sha512-J922XmQEUrz8+fPD/piCUDMBnC0OIDo8V7aPhAkofmJjIKYPmcn0BYUgSPfrrcXbVZtjc8SsLPoqqFdSWZPL3w==
+  dependencies:
+    "@types/jest" "*"
+
+"@types/jest@*", "@types/jest@^23.3.10":
   version "23.3.10"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.10.tgz#4897974cc317bf99d4fe6af1efa15957fa9c94de"
   integrity sha512-DC8xTuW/6TYgvEg3HEXS7cu9OijFqprVDXXiOcdOKZCU/5PJNLZU37VVvmZHdtMiGOa8wAA/We+JzbdxFzQTRQ==
@@ -2626,6 +2633,11 @@ jest-mock@^23.2.0:
   version "23.2.0"
   resolved "https://registry.yarnpkg.com/jest-mock/-/jest-mock-23.2.0.tgz#ad1c60f29e8719d47c26e1138098b6d18b261134"
   integrity sha1-rRxg8p6HGdR8JuETgJi20YsmETQ=
+
+jest-plugin-context@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/jest-plugin-context/-/jest-plugin-context-2.9.0.tgz#602aacbe61213a3bb229067db0eee9e003eb1931"
+  integrity sha1-YCqsvmEhOjuyKQZ9sO7p4APrGTE=
 
 jest-regex-util@^23.3.0:
   version "23.3.0"

@@ -2,9 +2,10 @@ import { GraphQLScalarType } from "graphql";
 import { GraphQLError } from "graphql/error";
 import { Kind } from "graphql/language";
 
-function isIp(ip) {
+export function isValid(ip) {
   return (
-    ip.match(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) &&
+    typeof ip === "string" &&
+    !!ip.match(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) &&
     ip
       .split(".")
       .map(Number)
@@ -21,7 +22,7 @@ export default new GraphQLScalarType({
       throw new TypeError(`Value is not string: ${value}`);
     }
 
-    if (!isIp(value)) {
+    if (!isValid(value)) {
       throw new TypeError(`Value is not a valid IP: ${value}`);
     }
 
@@ -33,7 +34,7 @@ export default new GraphQLScalarType({
       throw new TypeError(`Value is not string: ${value}`);
     }
 
-    if (!isIp(value)) {
+    if (!isValid(value)) {
       throw new TypeError(`Value is not a valid IP: ${value}`);
     }
 
@@ -47,7 +48,7 @@ export default new GraphQLScalarType({
       );
     }
 
-    if (!isIp(ast.value)) {
+    if (!isValid(ast.value)) {
       throw new TypeError(`Value is not a valid IP: ${ast.value}`);
     }
 

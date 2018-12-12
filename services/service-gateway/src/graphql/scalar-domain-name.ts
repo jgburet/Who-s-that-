@@ -2,10 +2,13 @@ import { GraphQLScalarType } from "graphql";
 import { GraphQLError } from "graphql/error";
 import { Kind } from "graphql/language";
 
-function isDomainName(dn) {
+export function isValid(dn): boolean {
   // https://stackoverflow.com/a/26987741/3037415
-  return dn.match(
-    /^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/
+  return (
+    typeof dn === "string" &&
+    !!dn.match(
+      /^((?!-))(xn--)?[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]{0,1}\.(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$/
+    )
   );
 }
 
@@ -18,7 +21,7 @@ export default new GraphQLScalarType({
       throw new TypeError(`Value is not string: ${value}`);
     }
 
-    if (!isDomainName(value)) {
+    if (!isValid(value)) {
       throw new TypeError(`Value is not a valid domain name: ${value}`);
     }
 
@@ -30,7 +33,7 @@ export default new GraphQLScalarType({
       throw new TypeError(`Value is not string: ${value}`);
     }
 
-    if (!isDomainName(value)) {
+    if (!isValid(value)) {
       throw new TypeError(`Value is not a valid domain name: ${value}`);
     }
 
@@ -44,7 +47,7 @@ export default new GraphQLScalarType({
       );
     }
 
-    if (!isDomainName(ast.value)) {
+    if (!isValid(ast.value)) {
       throw new TypeError(`Value is not a valid domain name: ${ast.value}`);
     }
 
